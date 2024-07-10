@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Budget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Begin>2024-07-10T17:44:09.2793676+02:00</Begin>
+  <End>2024-07-10T17:44:09.2793695+02:00</End>
+  <InitialBudget>0</InitialBudget>
+  <Expenses>0</Expenses>
+  <Gains>0</Gains>
+  <Note>
+    <ID>-1</ID>
+    <Title>title</Title>
+    <DateTime_Created>2024-07-10T17:44:09.2793704+02:00</DateTime_Created>
+    <DateTime_Edited>2024-07-10T18:05:30.8358216+02:00</DateTime_Edited>
+    <Content>10.07.2024 18:05:30
+
+
+10.07.2024 18:05:30
+
+
+10.07.2024 18:05:30
+
+
+note</Content>
+  </Note>
+  <BudgetChanges />
+</Budget>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Budget xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Begin>2024-07-02T00:00:00</Begin>
+  <End>2024-07-10T23:59:59</End>
+  <InitialBudget>93.88</InitialBudget>
+  <Expenses>70</Expenses>
+  <Gains>28.8</Gains>
+  <Note>
+    <ID>-1</ID>
+    <Title>title</Title>
+    <DateTime_Created>2024-07-10T11:33:26.1726439+02:00</DateTime_Created>
+    <DateTime_Edited>2024-07-10T19:15:14.5792299+02:00</DateTime_Edited>
+    <Content>10.07.2024 19:15:14
+
+
+10.07.2024 13:30:00
+zuviel bezahlt.
+
+10.07.2024 11:33:53
+
+
+10.07.2024 11:33:53
+
+
+10.07.2024 11:33:53
+
+
+test und test</Content>
+  </Note>
+  <BudgetChanges>
+    <BudgetItem>
+      <Interval>Once</Interval>
+      <Type>Gain</Type>
+      <Date>2024-07-11T00:00:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>25</Sum>
+    </BudgetItem>
+    <BudgetItem>
+      <Interval>Once</Interval>
+      <Type>Expense</Type>
+      <Date>2024-07-02T00:00:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>10</Sum>
+    </BudgetItem>
+    <BudgetItem>
+      <Interval>Day</Interval>
+      <Type>Expense</Type>
+      <Date>2024-07-03T00:00:00</Date>
+      <Item>descriptionf</Item>
+      <Quantity>2</Quantity>
+      <Sum>1</Sum>
+    </BudgetItem>
+    <BudgetItem>
+      <Interval>Month</Interval>
+      <Type>Gain</Type>
+      <Date>2024-07-04T00:00:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>3.8</Sum>
+    </BudgetItem>
+    <BudgetItem>
+      <Interval>Once</Interval>
+      <Type>Expense</Type>
+      <Date>2024-07-10T16:29:08.4428588+02:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>33</Sum>
+    </BudgetItem>
+    <BudgetItem>
+      <Interval>Once</Interval>
+      <Type>Expense</Type>
+      <Date>2024-07-10T16:29:20.1407918+02:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>25</Sum>
+    </BudgetItem>
+  </BudgetChanges>
+</Budget>

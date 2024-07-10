@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Components\BudgetItemInputMask.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\BudgetResultMask.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Components\SetupField.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\BudgetChangeView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Components\BudgetItemInputMask.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Components\BudgetResultMask.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Components\SetupField.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Default.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\BudgetChangeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
