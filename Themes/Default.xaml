@@ -18,6 +18,7 @@
     <sys:String x:Key="MaximizeContextMenuItemHeader">Maximize</sys:String>
 
 
+    <!-- Calendar styles -->
     <!--#region Calendar -->
     <Style TargetType="Calendar" x:Key="CalendarStyle">
 
@@ -197,6 +198,8 @@
     </Style>
     <!--#endregion-->
 
+
+    <!-- DatePicker styles -->
     <!--#region DatePicker -->
     <Style TargetType="DatePicker">
 
@@ -334,6 +337,8 @@
 
     <!--#endregion-->
 
+
+    <!-- Button styles -->
     <!--#region buttons -->
     
     <Style TargetType="Button" x:Key="buttonStyle">
@@ -507,8 +512,7 @@
     
     <!--#endregion-->
 
-    
-    
+        
     <Style TargetType="Border" x:Key="VisibilityFieldBorder">
         <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -518,7 +522,80 @@
     </Style>
 
     
-    
+    <!-- ListView styles -->
+    <!--#region ListView styles -->
+
+    <Style TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+
+        <Setter Property="Foreground" Value="Transparent"/>
+
+        <!-- trying to deactivate focus rectangle arround the entire listview
+           which appears on mouse over and selection, no effect, giving up for now. -->
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ItemsControl.FocusVisualStyle" Value="{x:Null}"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseDirectlyOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="ListBoxItem" x:Key="ItemContainerStyle">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="25"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border CornerRadius="2" SnapsToDevicePixels="True"  
+                               BorderThickness="{TemplateBinding BorderThickness}"   
+                               BorderBrush="{TemplateBinding BorderBrush}"   
+                               Background="{TemplateBinding Background}">
+
+                        <ContentPresenter Content="{Binding}"/>
+                    </Border>
+
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}" />
+
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+    <!--#endregion-->
+
+
+    <!-- TextBlock styles -->
     <!--#region textblock -->
     
     <Style x:Key="DoubleValueTextBlock" TargetType="TextBlock">
@@ -548,7 +625,7 @@
     <!--#endregion-->
 
 
-    
+    <!-- TextBox styles -->
     <!--#region textbox -->
     
     <Style x:Key="DoubleValueTextBox" TargetType="TextBox">
@@ -559,9 +636,45 @@
         <Setter Property="FontFamily" Value="{DynamicResource FF}"/>
         <Setter Property="FontSize" Value="{DynamicResource FS}"/>
         <Setter Property="TextAlignment" Value="Right"/>
-        <Setter Property="Padding" Value="10 5"/>
         <Setter Property="Width" Value="Auto"/>
-        <Style.Triggers>
+
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+                      
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border 
+                    Name="Border"
+                        CornerRadius="2" 
+                        Padding="2"
+                        Background="{DynamicResource BackgroundBrush}"
+                        BorderBrush="{DynamicResource TextBrush}"
+                        BorderThickness="1"  >
+                        <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource TextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource TextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+            
+        </Setter>
+
+        <!--<Style.Triggers>
+
             <Trigger Property="IsReadOnly" Value="True">
                 <Setter Property="Background" Value="{DynamicResource TextBrush}"/>
                 <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
@@ -571,7 +684,9 @@
                 <Setter Property="Background" Value="{DynamicResource TextBrush}"/>
                 <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
             </Trigger>
-        </Style.Triggers>
+
+        </Style.Triggers>-->
+        
     </Style>
 
     
@@ -582,18 +697,41 @@
         <Setter Property="FontFamily" Value="{DynamicResource FF}"/>
         <Setter Property="FontSize" Value="{DynamicResource FS}"/>
         <Setter Property="TextAlignment" Value="Left"/>
-        <Setter Property="Padding" Value="10 5"/>
         <Setter Property="Width" Value="Auto"/>
-        <Style.Triggers>
-            <Trigger Property="IsReadOnly" Value="True">
-                <Setter Property="Background" Value="{DynamicResource TextBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{DynamicResource TextBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
-            </Trigger>
-        </Style.Triggers>
+
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border 
+                    Name="Border"
+                        CornerRadius="2" 
+                        Padding="2"
+                        Background="{DynamicResource BackgroundBrush}"
+                        BorderBrush="{DynamicResource TextBrush}"
+                        BorderThickness="1"  >
+                        <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource TextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource TextBrush}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource BackgroundBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+            
+            </Setter>
     </Style>
     
     <!--#endregion-->

@@ -42,21 +42,32 @@
                 NotifyOnSourceUpdated=True,
                 UpdateSourceTrigger=PropertyChanged}"                
 
-                NumberOfDaysLeft="{Binding BudgetViewModel.NumberOfDaysLeft,
+                DaysLeftPercentage="{Binding BudgetViewModel.DaysLeftPercentage,
                 Mode=OneWay, 
                 NotifyOnSourceUpdated=True,
                 UpdateSourceTrigger=PropertyChanged}"    
                 
-            InitialBudget="{Binding BudgetViewModel.InitialBudget,
-            Mode=TwoWay,
-            UpdateSourceTrigger=PropertyChanged}"
-            Expenses="{Binding BudgetViewModel.Expenses,
-            UpdateSourceTrigger=PropertyChanged}"
-            Gains="{Binding BudgetViewModel.Gains,
-            UpdateSourceTrigger=PropertyChanged}"
-            CurrentBalance="{Binding BudgetViewModel.CurrentBalance,
-            UpdateSourceTrigger=PropertyChanged}"
-            Margin="0 20"/>
+                InitialBudget="{Binding BudgetViewModel.InitialBudget,
+                Mode=TwoWay,
+                UpdateSourceTrigger=PropertyChanged}"
+                
+                Expenses="{Binding BudgetViewModel.Expenses,
+                UpdateSourceTrigger=PropertyChanged}"
+                
+                Gains="{Binding BudgetViewModel.Gains,
+                UpdateSourceTrigger=PropertyChanged}"
+                
+                CurrentBalance="{Binding BudgetViewModel.CurrentBalance,                
+                UpdateSourceTrigger=PropertyChanged}"
+                
+                Margin="0 20"
+                
+                GainExpenseBrush="{Binding BudgetViewModel.GainExpenseBrush,
+            NotifyOnSourceUpdated=True,
+                UpdateSourceTrigger=PropertyChanged,
+                Mode=OneWay}"
+                />
+            
         </Border>
 
 
@@ -91,12 +102,13 @@
         </UniformGrid>
 
 
-        <Border Style="{StaticResource VisibilityFieldBorder}"
+        <Border Style="{StaticResource VisibilityFieldBorder}"                
                 Grid.Row="2">
 
             <ListView ItemsSource="{Binding BudgetItemViewModels,
                 NotifyOnSourceUpdated=True,
                 UpdateSourceTrigger=PropertyChanged}"
+                      Margin="5 2"
                       SelectionMode="Extended"                      
                       Name="BudgetListView"         
                           VerticalContentAlignment="Top" 
@@ -105,59 +117,103 @@
                           
                       SelectedItem="{Binding BudgetItemViewModel}">
 
-                <ListView.Template>
+                <ListBox.Template>
                     <ControlTemplate>
                         <ScrollViewer>
                             <ItemsPresenter/>
-                        </ScrollViewer>        
+                        </ScrollViewer>
                     </ControlTemplate>
-                    
-                </ListView.Template>
 
-                    <ListView.ItemTemplate>
+                </ListBox.Template>
 
-                        <DataTemplate>
-                            <comps:BudgetItemInputMask Margin="5 2 5 2"
-                            
-                            BudgetPeriodBegin="{Binding BudgetViewModel.Begin,
-                            NotifyOnSourceUpdated=True}"
-                            
-                            BudgetPeriodEnd="{Binding BudgetViewModel.End,
-                            NotifyOnSourceUpdated=True}"
-                            
-                            BudgetInterval="{Binding Interval,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            BudgetType="{Binding Type,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            Date="{Binding Date,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            Item="{Binding Item,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            Quantity="{Binding Quantity,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            Sum="{Binding Sum,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=TwoWay}"
-                            
-                            Result="{Binding Result,
-                                UpdateSourceTrigger=PropertyChanged,
-                                Mode=OneWay}"/>
-                        </DataTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ItemContainerStyle}">
 
-                    </ListView.ItemTemplate>
+                        <Setter Property="Template">
+                            <Setter.Value>
 
-                </ListView>
-           
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+
+                                    <Border CornerRadius="2" SnapsToDevicePixels="True"  
+                                     BorderThickness="{TemplateBinding BorderThickness}"   
+                                     BorderBrush="{TemplateBinding BorderBrush}"   
+                                     Background="{TemplateBinding Background}">
+                                        <comps:BudgetItemInputMask Margin="5 2 5 2"
+                                                                   BudgetPeriodBegin="{Binding BudgetViewModel.Begin,
+                                            NotifyOnSourceUpdated=True}"
+                                                                   
+                                                                   BudgetPeriodEnd="{Binding BudgetViewModel.End,
+                                            NotifyOnSourceUpdated=True}"
+                                                                   
+                                                                   BudgetInterval="{Binding Interval,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                     
+                                                                   BudgetType="{Binding Type,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                   
+                                                                   Date="{Binding Date,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                   
+                                                                   Item="{Binding Item,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                   
+                                                                   Quantity="{Binding Quantity,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                   
+                                                                   Sum="{Binding Sum,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay}"
+                                                                   
+                                                                   Result="{Binding Result,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=OneWay}"
+                                                                   
+                                                                   GainExpenseBrush="{Binding GainExpenseBrush,
+                                            NotifyOnSourceUpdated=True,
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            Mode=OneWay}"
+                                                                   />
+
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                                        </Trigger>
+
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}" />
+
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                </ListBox.ItemContainerStyle>
+
+                <ListView.ItemTemplate>
+
+                    <DataTemplate>
+
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+
+            </ListView>
+
         </Border>
 
     </Grid>

@@ -118,8 +118,7 @@
 
                 <ToggleButton IsChecked="{Binding ShowBudgetOverview}"
                           Style="{StaticResource toggleButtonStyle}"
-                    Visibility="{Binding ShowBudget,
-                Converter={StaticResource VisibilityConverter}}"
+
                           VerticalAlignment="Center"
                           Margin="5 0 5 0"
                           Grid.Column="1"
@@ -158,8 +157,6 @@
 
                 <ToggleButton IsChecked="{Binding ShowNotes}"
                           Style="{StaticResource toggleButtonStyle}"
-                    Visibility="{Binding ShowBudget,
-                Converter={StaticResource VisibilityConverter}}"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
                           Margin="5 0 5 0"
@@ -186,11 +183,11 @@
                     <WrapPanel Orientation="Vertical"
                                 HorizontalAlignment="Stretch">
                         <UniformGrid Columns="3"
-                                Margin="0 0 0 5">
+                                Margin="0 5 0 5">
                             <Button Content="+ Budget"
                                 Command="{Binding AddBudgetCommand}"
                                 Style="{StaticResource buttonStyle}"
-                                Margin="0 0 5 0"/>
+                                Margin="5 0 5 0"/>
                             <Button Content="Duplicate"
                                 Command="{Binding DuplicateBudgetCommand}"
                                 CommandParameter="{Binding ElementName=BudgetsList, Path=SelectedItems}"
@@ -200,67 +197,87 @@
                                 Command="{Binding RemoveBudgetCommand}"
                                 CommandParameter="{Binding ElementName=BudgetsList, Path=SelectedItems}"
                                 Style="{StaticResource buttonStyle}"
-                                Margin="5 0 0 0"/>
+                                Margin="5 0 5 0"/>
 
                         </UniformGrid>
 
-                        <ListView ItemsSource="{Binding BudgetChangeViewModel.Budgets,
-                        NotifyOnSourceUpdated=True}"
-                              SelectedItem="{Binding BudgetChangeViewModel.BudgetViewModel}"
-                              SelectionMode="Extended"             
+                        <ListBox ItemsSource="{Binding BudgetChangeViewModel.Budgets,
+                            NotifyOnSourceUpdated=True}"
+                                  SelectedItem="{Binding BudgetChangeViewModel.BudgetViewModel}"
+                                  SelectionMode="Extended"             
+                                 Margin="5 0 5 5"
                               
-                              Name="BudgetsList"        
+                                  Name="BudgetsList"        
                               
-                              VerticalContentAlignment="Top" 
+                                  VerticalContentAlignment="Top" 
                           
-                              MaxHeight="800"
+                                  MaxHeight="800"
                               >
 
-                            <ListView.Template>
+                        <ListBox.Template>
                                 <ControlTemplate>
                                     <ScrollViewer>
                                         <ItemsPresenter/>
                                     </ScrollViewer>
                                 </ControlTemplate>
 
-                            </ListView.Template>
+                            </ListBox.Template>
 
-                            <ListView.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ItemContainerStyle}">
 
-                                <DataTemplate>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        
+                                        <Border CornerRadius="2" SnapsToDevicePixels="True"  
+                                                BorderThickness="{TemplateBinding BorderThickness}"   
+                                                BorderBrush="{TemplateBinding BorderBrush}"   
+                                                Background="{TemplateBinding Background}">
 
-                                    <Border Style="{StaticResource VisibilityFieldBorder}">
+                                                    <UniformGrid Columns="2">
+                                                        <TextBlock Style="{StaticResource StringValueTextBlock}" 
+                                           Text="{Binding Begin, StringFormat=d}"/>
+                                                        <TextBlock Style="{StaticResource DoubleValueTextBlock}"
+                                           Text="{Binding End, StringFormat=d}"/>
 
-                                        <UniformGrid Columns="2">
+                                                        <TextBlock Style="{StaticResource StringValueTextBlock}"
+                                           Text="initial budget"/>
+                                                        <TextBlock Style="{StaticResource DoubleValueTextBlock}"
+                                           Text="{Binding InitialBudget,StringFormat=C2}"/>
+                                                        <!--<TextBlock Style="{StaticResource StringValueTextBlock}"
+                                     Text="actual budget"/>
+                                <TextBlock Style="{StaticResource DoubleValueTextBlock}"
+                                     Text="{Binding CurrentBalance,StringFormat=C2}"/>-->
+                                                    </UniformGrid>
 
-                                            <TextBlock Style="{StaticResource StringValueTextBlock}" 
-                                                   Text="{Binding Begin, StringFormat=d}"/>
-                                            <TextBlock Style="{StaticResource DoubleValueTextBlock}"
-                                                   Text="{Binding End, StringFormat=d}"/>
+                                            </Border>
 
-                                            <TextBlock Style="{StaticResource StringValueTextBlock}"
-                                                   Text="initial budget"/>
-                                            <TextBlock Style="{StaticResource DoubleValueTextBlock}"
-                                                   Text="{Binding InitialBudget,StringFormat=C2}"/>
+                                        <ControlTemplate.Triggers>
 
-                                            <!--<TextBlock Style="{StaticResource StringValueTextBlock}"
-                                             Text="actual budget"/>
-                                        <TextBlock Style="{StaticResource DoubleValueTextBlock}"
-                                             Text="{Binding CurrentBalance,StringFormat=C2}"/>-->
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                                            </Trigger>
 
-                                        </UniformGrid>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource SelectionBrush}" />
+                                                <Setter Property="Foreground" Value="{DynamicResource BackgroundBrush}"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}" />
 
+                                            </Trigger>
 
-                                    </Border>
+                                        </ControlTemplate.Triggers>
 
-                                </DataTemplate>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            </Style>
 
-                            </ListView.ItemTemplate>
+                        </ListBox.ItemContainerStyle>
 
-
-                        </ListView>
-
-
+                        </ListBox>
 
                     </WrapPanel>
 

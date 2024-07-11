@@ -1,10 +1,5 @@
 ﻿using BudgetWatcher.Models;
 using BudgetWatcher.ViewModels.ViewLess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BudgetWatcher.Commands
 {
@@ -37,3 +32,4 @@ namespace BudgetWatcher.Commands
 
     }
 }
+// EOF

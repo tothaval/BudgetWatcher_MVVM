@@ -1,16 +1,12 @@
-﻿using BudgetWatcher.Models;
-using BudgetWatcher.Navigation;
+﻿using BudgetWatcher.Navigation;
 using BudgetWatcher.Resources;
 using BudgetWatcher.Utility;
 using BudgetWatcher.ViewModels;
 using BudgetWatcher.ViewModels.ViewLess;
 using System.Collections.ObjectModel;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using static System.Net.WebRequestMethods;
 using System.Xml.Serialization;
 
 namespace BudgetWatcher
@@ -110,3 +106,4 @@ namespace BudgetWatcher
         }
     }
 }
+// EOF

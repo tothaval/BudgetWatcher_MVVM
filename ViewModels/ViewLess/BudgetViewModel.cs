@@ -1,25 +1,21 @@
-﻿using BudgetWatcher.Models;
-using System;
-using System.Collections.Generic;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  BudgetViewModel : BaseViewModel
+ *  
+ */
+using BudgetWatcher.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Media;
+
 
 namespace BudgetWatcher.ViewModels.ViewLess
 {
     public class BudgetViewModel : BaseViewModel
     {
-        private Budget _Budget;
-        public Budget GetBudget => _Budget;
 
-        public int NumberOfDays => (End - Begin).Days;
-
-        public double NumberOfDaysLeft => GetNumberOfDaysLeft();
-
-
+        // Properties & Fields
+        #region Properties & Fields
         public DateTime Begin
         {
             get { return _Budget.Begin; }
@@ -28,9 +24,20 @@ namespace BudgetWatcher.ViewModels.ViewLess
                 _Budget.Begin = value;
                 OnPropertyChanged(nameof(Begin));
                 OnPropertyChanged(nameof(NumberOfDays));
-                OnPropertyChanged(nameof(NumberOfDaysLeft));
+                OnPropertyChanged(nameof(DaysLeftPercentage));
             }
         }
+
+
+        private Budget _Budget;
+        public Budget GetBudget => _Budget;
+
+
+        public double CurrentBalance => _Budget.CurrentBalance;
+
+
+        // percentage didn't work out, change this and related stuff to DaysLeft
+        public double DaysLeftPercentage => GetDaysLeftPercentage();
 
 
         public DateTime End
@@ -42,23 +49,10 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
                 OnPropertyChanged(nameof(End));
                 OnPropertyChanged(nameof(NumberOfDays));
-                OnPropertyChanged(nameof(NumberOfDaysLeft));
+                OnPropertyChanged(nameof(DaysLeftPercentage));
             }
         }
 
-
-        public double CurrentBalance => _Budget.CurrentBalance;
-
-        public double InitialBudget
-		{
-			get { return _Budget.InitialBudget; }
-			set
-			{
-                _Budget.InitialBudget = value;
-                OnPropertyChanged(nameof(CurrentBalance));
-                OnPropertyChanged(nameof(InitialBudget));
-			}
-		}
 
         public double Expenses
         {
@@ -66,10 +60,30 @@ namespace BudgetWatcher.ViewModels.ViewLess
             set
             {
                 _Budget.Expenses = value;
+                OnPropertyChanged(nameof(GainExpenseBrush));
                 OnPropertyChanged(nameof(CurrentBalance));
                 OnPropertyChanged(nameof(Expenses));
             }
         }
+
+
+        public Brush GainExpenseBrush
+        {
+            get
+            {
+                if (CurrentBalance > 0.0)
+                {
+                    return (SolidColorBrush)Application.Current.Resources["GainBrush"];
+                }
+                else if (CurrentBalance == 0.0)
+                {
+                    return (SolidColorBrush)Application.Current.Resources["BackgroundBrush"];
+                }
+
+                return (SolidColorBrush)Application.Current.Resources["ExpenseBrush"];
+            }
+        }
+
 
         public double Gains
         {
@@ -77,8 +91,22 @@ namespace BudgetWatcher.ViewModels.ViewLess
             set
             {
                 _Budget.Gains = value;
+                OnPropertyChanged(nameof(GainExpenseBrush));
                 OnPropertyChanged(nameof(CurrentBalance));
                 OnPropertyChanged(nameof(Gains));
+            }
+        }
+
+
+        public double InitialBudget
+        {
+            get { return _Budget.InitialBudget; }
+            set
+            {
+                _Budget.InitialBudget = value;
+                OnPropertyChanged(nameof(GainExpenseBrush));
+                OnPropertyChanged(nameof(CurrentBalance));
+                OnPropertyChanged(nameof(InitialBudget));
             }
         }
 
@@ -93,6 +121,13 @@ namespace BudgetWatcher.ViewModels.ViewLess
             }
         }
 
+
+        public int NumberOfDays => (End - Begin).Days;
+        #endregion
+
+
+        // Collections
+        #region Collections
 
         public ObservableCollection<BudgetItem> BudgetChanges
         {
@@ -116,8 +151,11 @@ namespace BudgetWatcher.ViewModels.ViewLess
             }
         }
 
+        #endregion
 
 
+        // Constructors
+        #region Constructors
 
         public BudgetViewModel(Budget budget)
         {
@@ -129,13 +167,19 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
             CreateBudgetItemViewModels();
 
-            BudgetItemViewModels.CollectionChanged += BudgetItemViewModels_CollectionChanged;            
+            BudgetItemViewModels.CollectionChanged += BudgetItemViewModels_CollectionChanged;
+
         }
 
+        #endregion
+
+
+        // Methods
+        #region Methods
 
         public void AddBudgetItem(BudgetItem budgetItem)
         {
-            BudgetChanges.Add(budgetItem);
+            BudgetChanges.Insert(0, budgetItem);
 
             CreateBudgetItemViewModel(budgetItem);
         }
@@ -190,7 +234,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
             budgetItemViewModel.ValueChange += BudgetItemViewModel_ValueChange;
 
-            BudgetItemViewModels.Add(budgetItemViewModel);
+            BudgetItemViewModels.Insert(0, budgetItemViewModel);
 
         }
 
@@ -210,10 +254,13 @@ namespace BudgetWatcher.ViewModels.ViewLess
         /// Calculates the number of days left in the budget period.
         /// if double value is < -0.0, returns 0.0, else value
         /// period begins 0:00 Begin date and ends 23:59 End date.
+        /// 
+        /// Percentage may work well with values below 1 day, but
+        /// above the large percentage numbers may distract the user, dunno.
         /// /// </summary>
         /// <returns>double (End - DateTime.Now).TotalDays </returns>
-        private double GetNumberOfDaysLeft()
-        {    
+        private double GetDaysLeftPercentage()
+        {
             double days = (End - DateTime.Now).TotalDays;
 
             if (days < 0.0)
@@ -230,7 +277,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
             CalculateExpenses();
             CalculateGains();
             OnPropertyChanged(nameof(NumberOfDays));
-            OnPropertyChanged(nameof(NumberOfDaysLeft));
+            OnPropertyChanged(nameof(DaysLeftPercentage));
         }
 
 
@@ -249,6 +296,22 @@ namespace BudgetWatcher.ViewModels.ViewLess
         }
 
 
+        public void UpdateGainExpenseBrush()
+        {
+            OnPropertyChanged(nameof(GainExpenseBrush));
+
+            foreach (BudgetItemViewModel item in BudgetItemViewModels)
+            {
+                item.UpdateGainExpenseBrush();
+            }
+        } 
+
+        #endregion
+
+
+        // Events
+        #region Events
+
         private void BudgetItemViewModels_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             Recalculate();
@@ -260,10 +323,14 @@ namespace BudgetWatcher.ViewModels.ViewLess
             Recalculate();
         }
 
+
         private void BudgetItemViewModel_ValueChange(object? sender, EventArgs e)
         {
             Recalculate();
-        }
+        } 
+
+        #endregion
 
     }
 }
+// EOF

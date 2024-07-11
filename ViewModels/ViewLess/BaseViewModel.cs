@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  BaseViewModel
+ *  
+ *  implements INotifyPropertyChanged
+ */
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BudgetWatcher.ViewModels.ViewLess
 {
@@ -17,3 +18,4 @@ namespace BudgetWatcher.ViewModels.ViewLess
         }
     }
 }
+// EOF

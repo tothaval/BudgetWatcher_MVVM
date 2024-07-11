@@ -1,11 +1,12 @@
-﻿using BudgetWatcher.ViewModels.ViewLess;
-using System;
-using System.Collections.Generic;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  SetupFieldViewModel  : BaseViewModel
+ * 
+ *  viewmodel for SetupField component
+ */
+using BudgetWatcher.ViewModels.ViewLess;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -166,6 +167,7 @@ namespace BudgetWatcher.ViewModels
 
                 GainBrush = new SolidColorBrush(GainColor);
                 Application.Current.Resources["GainBrush"] = GainBrush;
+                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
 
                 OnPropertyChanged(nameof(GainColor));
             }
@@ -194,6 +196,8 @@ namespace BudgetWatcher.ViewModels
 
                 ExpenseBrush = new SolidColorBrush(ExpenseColor);
                 Application.Current.Resources["ExpenseBrush"] = ExpenseBrush;
+
+                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
 
                 OnPropertyChanged(nameof(ExpenseColor));
             }
@@ -301,6 +305,13 @@ namespace BudgetWatcher.ViewModels
         #endregion properties
 
 
+        // Event Properties
+        #region Event Properties
+
+        public EventHandler GainExpenseColorChange;
+
+        #endregion
+
 
         // collections
         #region collections
@@ -396,3 +407,4 @@ namespace BudgetWatcher.ViewModels
 
     }
 }
+// EOF

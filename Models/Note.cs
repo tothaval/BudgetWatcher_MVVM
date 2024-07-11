@@ -1,11 +1,9 @@
-﻿/*  MyNote (by Stephan Kammel, Dresden, Germany, 2024)
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
  *  
  *  Note
  * 
  *  serializable data model class
  */
-using System.Text;
-using System.Xml.Serialization;
 
 namespace BudgetWatcher.Models
 {

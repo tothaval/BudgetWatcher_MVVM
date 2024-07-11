@@ -162,7 +162,13 @@
             NotifyOnSourceUpdated=True,
             ElementName=BRM,
             StringFormat=C2}"
-                 Style="{StaticResource DoubleValueTextBox}"
+                 Style="{StaticResource DoubleValueTextBox}"                 
+                 
+                 Foreground="{Binding Path=GainExpenseBrush,
+            ElementName=BRM,
+            Mode=OneWay,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged}"
                  FontWeight="Bold"
                  IsReadOnly="True"
                     Width="300"
@@ -173,12 +179,12 @@
         <!--#endregion-->
         
         <!--#region Budget nr of days -->
-        <TextBlock Text="Number of Days left"
+        <TextBlock Text="Days Left"
                    Style="{StaticResource StringValueTextBlock}"
                    Grid.Column="0"
                    Grid.Row="8"/>
 
-        <TextBox Text="{Binding Path=NumberOfDaysLeft,
+        <TextBox Text="{Binding Path=DaysLeftPercentage,
             NotifyOnSourceUpdated=True,
             UpdateSourceTrigger=PropertyChanged,
             ElementName=BRM,

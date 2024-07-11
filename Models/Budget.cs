@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  Budget
+ * 
+ *  serializable data model class
+ */
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace BudgetWatcher.Models
@@ -29,19 +30,24 @@ namespace BudgetWatcher.Models
 
         // Collections
         #region Collections
+
         [XmlArray("BudgetChanges")]
         public ObservableCollection<BudgetItem> BudgetChanges { get; set; } = new ObservableCollection<BudgetItem>();
+
         #endregion
 
 
         // Constructors
         #region Constructors
+
         public Budget()
         {
 
         } 
+
         #endregion
 
 
     }
 }
+// EOF

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BudgetWatcher.Enums
 {
     public enum BudgetIntervals
@@ -14,3 +9,4 @@ namespace BudgetWatcher.Enums
         Year
     }
 }
+// EOF

@@ -1,18 +1,6 @@
-﻿using BudgetWatcher.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BudgetWatcher.Components
 {
@@ -22,9 +10,17 @@ namespace BudgetWatcher.Components
     public partial class BudgetResultMask : UserControl
     {
 
-
         // Properties & Fields
         #region Properties & Fields
+
+        public Brush GainExpenseBrush
+        {
+            get { return (Brush)GetValue(GainExpenseBrushProperty); }
+            set { SetValue(GainExpenseBrushProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for GainExpenseBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GainExpenseBrushProperty =
+            DependencyProperty.Register("GainExpenseBrush", typeof(Brush), typeof(BudgetResultMask), new PropertyMetadata(null));
 
 
         public int NumberOfDays
@@ -36,14 +32,14 @@ namespace BudgetWatcher.Components
         public static readonly DependencyProperty NumberOfDaysProperty =
             DependencyProperty.Register("NumberOfDays", typeof(int), typeof(BudgetResultMask), new PropertyMetadata(0));
 
-        public double NumberOfDaysLeft
+        public double DaysLeftPercentage
         {
-            get { return (double)GetValue(NumberOfDaysLeftProperty); }
-            set { SetValue(NumberOfDaysLeftProperty, value); }
+            get { return (double)GetValue(DaysLeftPercentageProperty); }
+            set { SetValue(DaysLeftPercentageProperty, value); }
         }
         // Using a DependencyProperty as the backing store for NumberOfDays.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NumberOfDaysLeftProperty =
-            DependencyProperty.Register("NumberOfDaysLeft", typeof(double), typeof(BudgetResultMask), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty DaysLeftPercentageProperty =
+            DependencyProperty.Register("DaysLeftPercentage", typeof(double), typeof(BudgetResultMask), new PropertyMetadata(0.0));
 
 
         public DateTime Begin
@@ -103,11 +99,15 @@ namespace BudgetWatcher.Components
 
         // Constructors
         #region Constructors
+
         public BudgetResultMask()
         {
             InitializeComponent();
         }
+
         #endregion
+
 
     }
 }
+// EOF

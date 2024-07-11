@@ -29,5 +29,13 @@
       <Quantity>1</Quantity>
       <Sum>33</Sum>
     </BudgetItem>
+    <BudgetItem>
+      <Interval>Once</Interval>
+      <Type>Expense</Type>
+      <Date>2024-07-11T12:46:55.6917994+02:00</Date>
+      <Item>description</Item>
+      <Quantity>1</Quantity>
+      <Sum>0</Sum>
+    </BudgetItem>
   </BudgetChanges>
 </Budget>

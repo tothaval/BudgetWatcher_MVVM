@@ -1,15 +1,23 @@
-﻿using BudgetWatcher.Enums;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  BudgetItemViewModel : BaseViewModel
+ *  
+ */
+using BudgetWatcher.Enums;
 using BudgetWatcher.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace BudgetWatcher.ViewModels.ViewLess
 {
     public class BudgetItemViewModel : BaseViewModel
     {
+
+        // add a BudgetHolder enum?
+        // plausible values could be BankAccount, Cash, Wallet, CreditCard
+        // they could be used to build statistics or offer more detail on output
+        // of the financial situation of the budget 
+
 
         // Properties & Fields
         #region Properties & Fields
@@ -20,16 +28,28 @@ namespace BudgetWatcher.ViewModels.ViewLess
         public BudgetViewModel BudgetViewModel { get; }
 
 
-        public BudgetIntervals Interval
+        public Brush GainExpenseBrush
         {
-            get { return _BudgetItem.Interval; }
-            set
+            get
             {
-                _BudgetItem.Interval = value;
-                OnPropertyChanged(nameof(Interval));
+                if (Type == BudgetTypes.Expense)
+                {
+                    return (SolidColorBrush)Application.Current.Resources["ExpenseBrush"];
+                }
 
-                ValueChange?.Invoke(this, EventArgs.Empty);
+                if (Type == BudgetTypes.Gain)
+                {
+                    return (SolidColorBrush)Application.Current.Resources["GainBrush"];
+                }
+
+                // just in case: SelectionBrush was chosen as return value because
+                // TextBrush would lead to problems with readonly textboxes and textblocks,
+                // because TextBrush and BackgroundBrush values are switched on those.
+                // anyway, right now (2024/07/11) there is no plan to expand BudgetTypes
+                // beyond the two values Gain and Expense
+                return (SolidColorBrush)Application.Current.Resources["SelectionBrush"];
             }
+
         }
 
 
@@ -40,6 +60,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
             {
                 _BudgetItem.Type = value;
                 OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(GainExpenseBrush));
 
                 ValueChange?.Invoke(this, EventArgs.Empty);
             }
@@ -104,8 +125,10 @@ namespace BudgetWatcher.ViewModels.ViewLess
         {
             get { return _BudgetItem.Result; }
         }
-        #endregion
 
+        #endregion
+        
+        
         // event Properties & Fields
         #region event Properties & Fields
 
@@ -125,5 +148,18 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         #endregion
 
+        
+        // Methods
+        #region Methods
+
+        public void UpdateGainExpenseBrush()
+        {
+            OnPropertyChanged(nameof(GainExpenseBrush));
+        } 
+
+        #endregion
+
+
     }
 }
+// EOF

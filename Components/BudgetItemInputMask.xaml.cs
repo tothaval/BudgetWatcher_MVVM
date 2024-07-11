@@ -1,18 +1,7 @@
 ﻿using BudgetWatcher.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BudgetWatcher.Components
 {
@@ -25,8 +14,18 @@ namespace BudgetWatcher.Components
         // Properties & Fields
         #region Properties & Fields
 
+        public Brush GainExpenseBrush
+        {
+            get { return (Brush)GetValue(GainExpenseBrushProperty); }
+            set { SetValue(GainExpenseBrushProperty, value); }
+        }
 
-            public DateTime BudgetPeriodBegin
+        // Using a DependencyProperty as the backing store for GainExpenseBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GainExpenseBrushProperty =
+            DependencyProperty.Register("GainExpenseBrush", typeof(Brush), typeof(BudgetItemInputMask), new PropertyMetadata(null));
+
+
+        public DateTime BudgetPeriodBegin
         {
             get { return (DateTime)GetValue(BudgetPeriodBeginProperty); }
             set { SetValue(BudgetPeriodBeginProperty, value); }
@@ -111,14 +110,15 @@ namespace BudgetWatcher.Components
 
         // Constructors
         #region Constructors
+
         public BudgetItemInputMask()
         {
             InitializeComponent();
         } 
+
         #endregion
-
-
 
 
     }
 }
+// EOF

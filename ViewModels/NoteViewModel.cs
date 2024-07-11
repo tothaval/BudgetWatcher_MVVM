@@ -1,4 +1,4 @@
-﻿/*  MyNote (by Stephan Kammel, Dresden, Germany, 2024)
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
  *  
  *  NoteViewModel  : BaseViewModel
  * 
@@ -6,9 +6,7 @@
  */
 using BudgetWatcher.Commands;
 using BudgetWatcher.Models;
-using BudgetWatcher.ViewModels;
 using BudgetWatcher.ViewModels.ViewLess;
-using System.Text;
 using System.Windows.Input;
 
 namespace BudgetWatcher.ViewModels

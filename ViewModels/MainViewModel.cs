@@ -1,26 +1,34 @@
-﻿using BudgetWatcher.Commands;
+﻿/*  BudgetWatcher (by Stephan Kammel, Dresden, Germany, 2024)
+ *  
+ *  MainViewModel : BaseViewModel
+ *  
+ */
+using BudgetWatcher.Commands;
 using BudgetWatcher.Commands.ContextMenuCommands;
-using BudgetWatcher.Models;
 using BudgetWatcher.Navigation;
 using BudgetWatcher.ViewModels.ViewLess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace BudgetWatcher.ViewModels
 {
     internal class MainViewModel : BaseViewModel
     {
+        
+        // Properties & Fields
+        #region Properties & Fields
+
         private readonly BudgetChangeViewModel _BudgetChangeViewModel;
         public BudgetChangeViewModel BudgetChangeViewModel => _BudgetChangeViewModel;
 
+
+        public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
+
+
         private readonly NavigationStore _navigationStore;
 
+
         public NoteViewModel NotesField { get; set; }
+
 
         public SetupFieldViewModel SetupField { get; }
 
@@ -70,30 +78,51 @@ namespace BudgetWatcher.ViewModels
                 _ShowSetup = value;
                 OnPropertyChanged(nameof(ShowSetup));
             }
-        }
+        } 
+        #endregion
 
 
+        // Commands
+        #region Commands
 
         public ICommand AddBudgetCommand { get; }
-        public ICommand CloseCommand {  get; }
-        public ICommand DuplicateBudgetCommand { get; }
-        public ICommand LeftPressCommand { get; }
-        public ICommand MaximizeCommand { get; }
-        public ICommand MinimizeCommand { get; }
-        public ICommand RemoveBudgetCommand { get; }
 
-        public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
+
+        public ICommand CloseCommand { get; }
+
+
+        public ICommand DuplicateBudgetCommand { get; }
+
+
+        public ICommand LeftPressCommand { get; }
+
+
+        public ICommand MaximizeCommand { get; }
+
+
+        public ICommand MinimizeCommand { get; }
+
+
+        public ICommand RemoveBudgetCommand { get; } 
+
+        #endregion
+
+
+        // Constructors
+        #region Constructors
 
         public MainViewModel(NavigationStore navigationStore, BudgetChangeViewModel budgetChangeViewModel)
         {
             _navigationStore = navigationStore;
             _BudgetChangeViewModel = budgetChangeViewModel;
 
-            //NotesField = new NoteViewModel(_BudgetChangeViewModel.BudgetViewModel.Note);
+            UpdateNotesField();
+
             SetupField = new SetupFieldViewModel();
 
+
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
-            _BudgetChangeViewModel.PropertyChanged += _BudgetChangeViewModel_PropertyChanged; ;
+            _BudgetChangeViewModel.PropertyChanged += _BudgetChangeViewModel_PropertyChanged;
 
             ShowBudget = true;
 
@@ -103,17 +132,55 @@ namespace BudgetWatcher.ViewModels
             MaximizeCommand = new MaximizeCommand();
             MinimizeCommand = new MinimizeCommand();
             RemoveBudgetCommand = new RemoveBudgetCommand(_BudgetChangeViewModel);
+
+            SetupField.GainExpenseColorChange += GainExpenseColorChangeEvent;
+        } 
+
+        #endregion
+
+
+
+        // Methods
+        #region Methods
+
+        private void UpdateNotesField()
+        {
+            if (_BudgetChangeViewModel.BudgetViewModel != null)
+            {
+                NotesField = new NoteViewModel(_BudgetChangeViewModel.BudgetViewModel.Note);
+            }
         }
+
+        #endregion
+
+
+        // Events
+        #region Events
 
         private void _BudgetChangeViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            NotesField = new NoteViewModel(_BudgetChangeViewModel.BudgetViewModel.Note);
+            UpdateNotesField();
+
             OnPropertyChanged(nameof(NotesField));
         }
 
+
+        private void GainExpenseColorChangeEvent(object? sender, EventArgs e)
+        {
+            _BudgetChangeViewModel.UpdateGainExpenseBrush();
+        }
+
+
         private void OnCurrentViewModelChanged()
         {
+            UpdateNotesField();
+
             OnPropertyChanged(nameof(CurrentViewModel));
-        }
+        } 
+
+        #endregion
+
+
     }
 }
+// EOF

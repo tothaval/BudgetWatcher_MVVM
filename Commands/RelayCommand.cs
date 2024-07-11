@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BudgetWatcher.Commands
 {
     public class RelayCommand : BaseCommand
@@ -54,3 +49,4 @@ namespace BudgetWatcher.Commands
 
     }
 }
+// EOF
