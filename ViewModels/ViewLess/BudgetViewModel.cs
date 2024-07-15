@@ -7,6 +7,7 @@ using BudgetWatcher.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 
 namespace BudgetWatcher.ViewModels.ViewLess
@@ -31,6 +32,9 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         private Budget _Budget;
         public Budget GetBudget => _Budget;
+
+
+        public double BudgetPerDay => GetBudgetPerDay();
 
 
         public double CurrentBalance => _Budget.CurrentBalance;
@@ -60,9 +64,11 @@ namespace BudgetWatcher.ViewModels.ViewLess
             set
             {
                 _Budget.Expenses = value;
-                OnPropertyChanged(nameof(GainExpenseBrush));
+
+                OnPropertyChanged(nameof(BudgetPerDay));
                 OnPropertyChanged(nameof(CurrentBalance));
                 OnPropertyChanged(nameof(Expenses));
+                OnPropertyChanged(nameof(GainExpenseBrush));
             }
         }
 
@@ -91,8 +97,13 @@ namespace BudgetWatcher.ViewModels.ViewLess
             set
             {
                 _Budget.Gains = value;
-                OnPropertyChanged(nameof(GainExpenseBrush));
+
+                OnPropertyChanged(nameof(BudgetPerDay));
+
                 OnPropertyChanged(nameof(CurrentBalance));
+
+                OnPropertyChanged(nameof(GainExpenseBrush));
+
                 OnPropertyChanged(nameof(Gains));
             }
         }
@@ -123,6 +134,9 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
 
         public int NumberOfDays => (End - Begin).Days;
+
+
+        private DispatcherTimer dispatcherTimer;
         #endregion
 
 
@@ -163,12 +177,25 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
             BudgetItemViewModels = new ObservableCollection<BudgetItemViewModel>();
 
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Interval = TimeSpan.FromMinutes(5);
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Start();
+
+
             OnPropertyChanged(nameof(BudgetItemViewModels));
 
             CreateBudgetItemViewModels();
 
             BudgetItemViewModels.CollectionChanged += BudgetItemViewModels_CollectionChanged;
 
+        }
+
+
+        private void DispatcherTimer_Tick(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(DaysLeftPercentage));
+            OnPropertyChanged(nameof(BudgetPerDay));
         }
 
         #endregion
@@ -247,6 +274,12 @@ namespace BudgetWatcher.ViewModels.ViewLess
             {
                 CreateBudgetItemViewModel(item);
             }
+        }
+
+
+        private double GetBudgetPerDay()
+        {
+            return CurrentBalance / DaysLeftPercentage;
         }
 
 

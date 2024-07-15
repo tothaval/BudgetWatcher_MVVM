@@ -114,13 +114,13 @@ namespace BudgetWatcher.Resources
 
 
 
-            TextBrush = (SolidColorBrush)Application.Current.Resources["GainBrush"];
+            GainBrush = (SolidColorBrush)Application.Current.Resources["GainBrush"];
 
             C_Gain = GainBrush.Color;
 
 
 
-            TextBrush = (SolidColorBrush)Application.Current.Resources["ExpenseBrush"];
+            ExpenseBrush = (SolidColorBrush)Application.Current.Resources["ExpenseBrush"];
 
             C_Expense = ExpenseBrush.Color;
 

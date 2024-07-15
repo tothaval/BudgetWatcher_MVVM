@@ -47,6 +47,11 @@
                 NotifyOnSourceUpdated=True,
                 UpdateSourceTrigger=PropertyChanged}"    
                 
+                BudgetPerDay="{Binding BudgetViewModel.BudgetPerDay,
+                Mode=OneWay,
+                NotifyOnSourceUpdated=True,
+                UpdateSourceTrigger=PropertyChanged}"
+                
                 InitialBudget="{Binding BudgetViewModel.InitialBudget,
                 Mode=TwoWay,
                 UpdateSourceTrigger=PropertyChanged}"
@@ -113,7 +118,7 @@
                       Name="BudgetListView"         
                           VerticalContentAlignment="Top" 
                           
-                          MaxHeight="480"
+                          MaxHeight="360"
                           
                       SelectedItem="{Binding BudgetItemViewModel}">
 

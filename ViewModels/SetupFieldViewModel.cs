@@ -62,6 +62,36 @@ namespace BudgetWatcher.ViewModels
         }
 
 
+        private Brush _ExpenseBrush;
+        public Brush ExpenseBrush
+        {
+            get { return _ExpenseBrush; }
+            set
+            {
+                _ExpenseBrush = value;
+                OnPropertyChanged(nameof(ExpenseBrush));
+            }
+        }
+
+
+        private Color _ExpenseColor;
+        public Color ExpenseColor
+        {
+            get { return _ExpenseColor; }
+            set
+            {
+                _ExpenseColor = value;
+
+                ExpenseBrush = new SolidColorBrush(ExpenseColor);
+                Application.Current.Resources["ExpenseBrush"] = ExpenseBrush;
+
+                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
+
+                OnPropertyChanged(nameof(ExpenseColor));
+            }
+        }
+
+
         private FontFamily _fontFamiliy;
         public FontFamily FontFamily
         {
@@ -117,6 +147,35 @@ namespace BudgetWatcher.ViewModels
         }
 
 
+        private Brush _GainBrush;
+        public Brush GainBrush
+        {
+            get { return _GainBrush; }
+            set
+            {
+                _GainBrush = value;
+                OnPropertyChanged(nameof(GainBrush));
+            }
+        }
+
+
+        private Color _GainColor;
+        public Color GainColor
+        {
+            get { return _GainColor; }
+            set
+            {
+                _GainColor = value;
+
+                GainBrush = new SolidColorBrush(GainColor);
+                Application.Current.Resources["GainBrush"] = GainBrush;
+                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
+
+                OnPropertyChanged(nameof(GainColor));
+            }
+        }
+
+
         private Brush _headerText;
         public Brush HeaderText
         {
@@ -143,66 +202,6 @@ namespace BudgetWatcher.ViewModels
                 OnPropertyChanged(nameof(HeaderTextColor));
             }
         }
-
-
-        private Brush _GainBrush;
-        public Brush GainBrush
-        {
-            get { return _GainBrush; }
-            set
-            {
-                _GainBrush = value;
-                OnPropertyChanged(nameof(GainBrush));
-            }
-        }
-
-
-        private Color _GainBrushColor;
-        public Color GainColor
-        {
-            get { return _GainBrushColor; }
-            set
-            {
-                _GainBrushColor = value;
-
-                GainBrush = new SolidColorBrush(GainColor);
-                Application.Current.Resources["GainBrush"] = GainBrush;
-                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
-
-                OnPropertyChanged(nameof(GainColor));
-            }
-        }
-
-
-        private Brush _ExpenseBrush;
-        public Brush ExpenseBrush
-        {
-            get { return _ExpenseBrush; }
-            set
-            {
-                _ExpenseBrush = value;
-                OnPropertyChanged(nameof(ExpenseBrush));
-            }
-        }
-
-
-        private Color _ExpenseBrushColor;
-        public Color ExpenseColor
-        {
-            get { return _ExpenseBrushColor; }
-            set
-            {
-                _ExpenseBrushColor = value;
-
-                ExpenseBrush = new SolidColorBrush(ExpenseColor);
-                Application.Current.Resources["ExpenseBrush"] = ExpenseBrush;
-
-                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
-
-                OnPropertyChanged(nameof(ExpenseColor));
-            }
-        }
-
 
 
         private string _Language;
