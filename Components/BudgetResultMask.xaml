@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto" SharedSizeGroup="C"/>
             <RowDefinition Height="Auto" SharedSizeGroup="C"/>
             <RowDefinition Height="Auto" SharedSizeGroup="C"/>
+            <RowDefinition Height="Auto" SharedSizeGroup="C"/>
         </Grid.RowDefinitions>
 
 
@@ -122,6 +123,7 @@
                    Grid.Row="4"/>
         <!--#endregion-->
 
+        
         <!--#region Expenses -->
         <TextBlock Text="Expenses"
                    Style="{StaticResource StringValueTextBlock}"
@@ -142,7 +144,8 @@
                    Grid.Row="5"/>
         <!--#endregion-->
 
-        <!--#region empty -->
+        
+        <!--#region empty -->        
         <Border BorderBrush="{DynamicResource HeaderBrush}"
                 BorderThickness="0 2 0 0"
                 Margin="0 5"
@@ -150,6 +153,7 @@
                 Grid.Row="6"/>
         <!--#endregion-->
 
+        
         <!--#region  -->
         <TextBlock Text="Current Balance"
                    Grid.Column="0"
@@ -178,6 +182,7 @@
                    Grid.Row="7"/>
         <!--#endregion-->
         
+        
         <!--#region Budget nr of days -->
         <TextBlock Text="Days Left"
                    Style="{StaticResource StringValueTextBlock}"
@@ -198,6 +203,34 @@
                  Grid.Column="1"
                  Grid.Row="8"/>
         <!--#endregion-->
+
+        
+        <!--#region BudgetPerDay -->
+        <TextBlock Text="Budget / Day"
+                   Grid.Column="0"
+                   Grid.Row="9"
+                 Style="{StaticResource StringValueTextBlock}"
+                   />
+
+        <TextBox Text="{Binding Path=BudgetPerDay,
+            NotifyOnSourceUpdated=True,
+            ElementName=BRM,
+            StringFormat=C2}"
+                 Style="{StaticResource DoubleValueTextBox}"                 
+                 
+                 Foreground="{Binding Path=GainExpenseBrush,
+            ElementName=BRM,
+            Mode=OneWay,
+            NotifyOnSourceUpdated=True,
+            UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="True"
+                    Width="300"
+                    HorizontalAlignment="Right"
+                   TextAlignment="Right"
+                   Grid.Column="1"
+                   Grid.Row="9"/>
+        <!--#endregion-->
+
 
     </Grid>
 </UserControl>

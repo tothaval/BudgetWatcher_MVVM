@@ -32,24 +32,25 @@ namespace BudgetWatcher.ViewModels.ViewLess
         {
             get
             {
-                if (Type == BudgetTypes.Expense)
+                if (Type.Equals(BudgetTypes.Expense))
                 {
                     return (SolidColorBrush)Application.Current.Resources["ExpenseBrush"];
                 }
-
-                if (Type == BudgetTypes.Gain)
+                else if (Type.Equals(BudgetTypes.Gain))
                 {
                     return (SolidColorBrush)Application.Current.Resources["GainBrush"];
                 }
+                else
+                {
 
-                // just in case: SelectionBrush was chosen as return value because
-                // TextBrush would lead to problems with readonly textboxes and textblocks,
-                // because TextBrush and BackgroundBrush values are switched on those.
-                // anyway, right now (2024/07/11) there is no plan to expand BudgetTypes
-                // beyond the two values Gain and Expense
-                return (SolidColorBrush)Application.Current.Resources["SelectionBrush"];
+                    // just in case: SelectionBrush was chosen as return value because
+                    // TextBrush would lead to problems with readonly textboxes and textblocks,
+                    // because TextBrush and BackgroundBrush values are switched on those.
+                    // anyway, right now (2024/07/11) there is no plan to expand BudgetTypes
+                    // beyond the two values Gain and Expense
+                    return (SolidColorBrush)Application.Current.Resources["SelectionBrush"];
+                }
             }
-
         }
 
 
@@ -60,6 +61,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
             {
                 _BudgetItem.Type = value;
                 OnPropertyChanged(nameof(Type));
+
+
                 OnPropertyChanged(nameof(GainExpenseBrush));
 
                 ValueChange?.Invoke(this, EventArgs.Empty);
@@ -91,7 +94,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
                 ValueChange?.Invoke(this, EventArgs.Empty);
             }
         }
-        
+
 
         public int Quantity
         {
@@ -127,8 +130,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
         }
 
         #endregion
-        
-        
+
+
         // event Properties & Fields
         #region event Properties & Fields
 
@@ -148,14 +151,14 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         #endregion
 
-        
+
         // Methods
         #region Methods
 
         public void UpdateGainExpenseBrush()
         {
             OnPropertyChanged(nameof(GainExpenseBrush));
-        } 
+        }
 
         #endregion
 

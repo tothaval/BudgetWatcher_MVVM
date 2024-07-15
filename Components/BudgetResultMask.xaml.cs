@@ -12,6 +12,17 @@ namespace BudgetWatcher.Components
 
         // Properties & Fields
         #region Properties & Fields
+        
+
+        public double BudgetPerDay
+        {
+            get { return (double)GetValue(BudgetPerDayProperty); }
+            set { SetValue(BudgetPerDayProperty, value); }
+        }
+        // Using a DependencyProperty as the backing store for NumberOfDays.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BudgetPerDayProperty =
+            DependencyProperty.Register("BudgetPerDay", typeof(double), typeof(BudgetResultMask), new PropertyMetadata(0.0));
+
 
         public Brush GainExpenseBrush
         {

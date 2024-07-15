@@ -95,8 +95,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -107,6 +108,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                
                 <ToggleButton IsChecked="{Binding ShowBudget}"
                           Content="BudgetWatcher prerelease"
                           HorizontalAlignment="Stretch"
@@ -122,7 +124,7 @@
                           VerticalAlignment="Center"
                           Margin="5 0 5 0"
                           Grid.Column="1"
-                          Grid.Row="1">
+                          Grid.Row="2">
                     <TextBlock>
                     <Run Text="."/>
                     <LineBreak/>
@@ -139,16 +141,15 @@
                                 VerticalAlignment="Stretch"
                                 Background="Transparent"
                                 Grid.Column="2"
-                                Grid.Row="1"/>
+                                Grid.ColumnSpan="2"
+                                Grid.Row="2"/>
 
                 <ToggleButton IsChecked="{Binding ShowSetup}"
-                          Style="{StaticResource toggleButtonStyle}"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          VerticalContentAlignment="Center"
-                          Margin="0 5 0 0"
-                          Grid.Column="2"
-                          Grid.Row="2">
+                              Style="{StaticResource centralTopToggleButtonStyle}"
+                        VerticalAlignment="Top"
+                          HorizontalAlignment="Stretch"
+                          Grid.Column="3"
+                          Grid.Row="0">
                     <TextBlock>
                     <Run Text="setup"/>
                     </TextBlock>
@@ -160,8 +161,8 @@
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
                           Margin="5 0 5 0"
-                          Grid.Column="3"
-                          Grid.Row="1">
+                          Grid.Column="4"
+                          Grid.Row="2">
                     <TextBlock>
                     <Run Text="."/>
                     <LineBreak/>
@@ -177,7 +178,7 @@
                     Visibility="{Binding ShowBudgetOverview,
                 Converter={StaticResource VisibilityConverter}}"
                     Grid.Column="0"
-                    Grid.Row="1"
+                    Grid.Row="2"
                     >
 
                     <WrapPanel Orientation="Vertical"
@@ -289,7 +290,8 @@
                     Visibility="{Binding ShowSetup,
                 Converter={StaticResource VisibilityConverter}}"
                     Grid.Column="2"
-                    Grid.Row="3"
+                        Grid.ColumnSpan="2"
+                    Grid.Row="1"
                     >
 
                     <comp:SetupField DataContext="{Binding SetupField}" />
@@ -300,8 +302,8 @@
                     Style="{StaticResource VisibilityFieldBorder}"
                     Visibility="{Binding ShowNotes,
                 Converter={StaticResource VisibilityConverter}}"
-                    Grid.Column="4"
-                    Grid.Row="1"
+                    Grid.Column="5"
+                    Grid.Row="2"
                     HorizontalAlignment="Stretch"
                     Margin="0 15 0 10"
                     >

@@ -89,6 +89,8 @@ namespace BudgetWatcher.Utility
                 xmlSerializer.Serialize(writer, resources);
             }
         }
+
+
     }
 }
 // EOF
