@@ -9,33 +9,29 @@
  *  is encapsulated within a MainViewModel
  */
 using BudgetWatcher.Commands;
+using BudgetWatcher.Models;
+using BudgetWatcher.Utility;
 using BudgetWatcher.ViewModels.ViewLess;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BudgetWatcher.ViewModels
 {
-    public class BudgetChangeViewModel : BaseViewModel
+    public partial class BudgetChangeViewModel : ObservableObject
     {
 
         // Properties & Fields
         #region Properties & Fields
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(BudgetItemViewModels))]
         private BudgetViewModel _BudgetViewModel;
-        public BudgetViewModel BudgetViewModel
-        {
-            get { return _BudgetViewModel; }
-            set
-            {
-                _BudgetViewModel = value;
-
-                OnPropertyChanged(nameof(BudgetViewModel));
-
-                OnPropertyChanged(nameof(BudgetItemViewModels));
-
-                UpdateCommands(BudgetViewModel);
-            }
-        }
 
         #endregion
 
@@ -51,8 +47,11 @@ namespace BudgetWatcher.ViewModels
                 {
                     return BudgetViewModel.BudgetItemViewModels;
                 }
+                else
+                {
+                    return new ObservableCollection<BudgetItemViewModel>();
+                }
 
-                return new ObservableCollection<BudgetItemViewModel>();
             }
 
             set
@@ -63,38 +62,9 @@ namespace BudgetWatcher.ViewModels
         }
 
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(BudgetItemViewModels))]
         private ObservableCollection<BudgetViewModel> _Budgets;
-        public ObservableCollection<BudgetViewModel> Budgets
-        {
-            get { return _Budgets; }
-            set
-            {
-                _Budgets = value;
-
-                OnPropertyChanged(nameof(Budgets));
-                OnPropertyChanged(nameof(BudgetItemViewModels));
-            }
-        }
-
-        #endregion
-
-        
-        // Commands
-        #region Commands
-
-        public ICommand AddExpenseCommand { get; private set; }
-
-
-        public ICommand AddGainCommand { get; private set; }
-
-
-        public ICommand ClearAllCommand { get; private set; }
-
-
-        public ICommand LeftPressCommand { get; private set; }
-
-
-        public ICommand RemoveItemCommand { get; private set; }
 
         #endregion
 
@@ -102,17 +72,22 @@ namespace BudgetWatcher.ViewModels
         // Constructors
         #region Constructors
 
-        public BudgetChangeViewModel(ObservableCollection<BudgetViewModel> budgets)
+        // passing arguments to constructor with di
+        // one way: https://stackoverflow.com/questions/37744637/how-can-i-pass-a-runtime-parameter-as-part-of-the-dependency-resolution
+        // 2nd way: https://stackoverflow.com/questions/53884417/net-core-di-ways-of-passing-parameters-to-constructor
+
+        public BudgetChangeViewModel()
         {
-            Budgets = budgets;
+            string budgetFolder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\budgets\\";
+
+            if (!Directory.Exists(budgetFolder))
+            {
+                Directory.CreateDirectory(budgetFolder);
+            }
+
+            Budgets = new Persistance().DeSerializeNotes();
 
             SelectFirst();
-
-            AddExpenseCommand = new AddExpenseCommand(BudgetViewModel);
-            AddGainCommand = new AddGainCommand(BudgetViewModel);
-            ClearAllCommand = new ClearAllCommand(BudgetViewModel);
-            LeftPressCommand = new LeftPressCommand();
-            RemoveItemCommand = new RemoveItemCommand(BudgetViewModel);
 
             OnPropertyChanged(nameof(BudgetViewModel));
             OnPropertyChanged(nameof(Budgets));
@@ -133,6 +108,67 @@ namespace BudgetWatcher.ViewModels
             OnPropertyChanged(nameof(BudgetViewModel));
             OnPropertyChanged(nameof(Budgets));
             OnPropertyChanged(nameof(BudgetItemViewModels));
+        }
+
+
+        [RelayCommand]
+        private void AddExpense(object? parameter)
+        {
+            BudgetViewModel.AddBudgetItem(
+                new BudgetItem()
+                {
+                    Interval = Enums.BudgetIntervals.Once,
+                    Type = Enums.BudgetTypes.Expense
+                });
+        }
+
+
+        [RelayCommand]
+            private void AddGain(object? parameter)
+        {
+            BudgetViewModel.AddBudgetItem(
+                new BudgetItem()
+                {
+                    Interval = Enums.BudgetIntervals.Once,
+                    Type = Enums.BudgetTypes.Gain
+                });
+        }
+
+
+        [RelayCommand]
+            private void ClearAll(object? parameter)
+        {
+            BudgetViewModel.Clear();
+        }
+
+
+        [RelayCommand]
+        private void LeftPress(object? parameter)
+        {
+            ContextMenuCommandsHandler.DragMoveMainWindow(parameter);
+        }
+
+
+        [RelayCommand]
+            private void RemoveItem(object? parameter)
+        {
+            IList selection = (IList)parameter;
+
+            if (selection != null)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    $"Do you want to delete selected budget item(s)?",
+                    "Remove Budget Item(s)", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    var selected = selection.Cast<BudgetItemViewModel>().ToArray();
+
+                    foreach (var item in selected)
+                    {
+                        BudgetViewModel.RemoveBudgetItem(item.GetBudgetItem);
+                    }
+                }
+            }
         }
 
 
@@ -159,22 +195,6 @@ namespace BudgetWatcher.ViewModels
         {
             BudgetViewModel.UpdateGainExpenseBrush();
         }
-
-
-        private void UpdateCommands(BudgetViewModel budgetViewModel)
-        {
-            if (budgetViewModel != null
-                && AddExpenseCommand != null
-                && AddGainCommand != null
-                && ClearAllCommand != null
-                && RemoveItemCommand != null)
-            {
-                ((AddExpenseCommand)AddExpenseCommand).UpdateViewModel(budgetViewModel);
-                ((AddGainCommand)AddGainCommand).UpdateViewModel(budgetViewModel);
-                ((ClearAllCommand)ClearAllCommand).UpdateViewModel(budgetViewModel);
-                ((RemoveItemCommand)RemoveItemCommand).UpdateViewModel(budgetViewModel);
-            }
-        } 
 
         #endregion
 

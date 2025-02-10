@@ -3,16 +3,21 @@
  *  BudgetViewModel : BaseViewModel
  *  
  */
+using BudgetManagement;
+using BudgetWatcher.Enums;
 using BudgetWatcher.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Budget = BudgetWatcher.Models.Budget;
+
 
 
 namespace BudgetWatcher.ViewModels.ViewLess
 {
-    public class BudgetViewModel : BaseViewModel
+    public partial class BudgetViewModel : ObservableObject
     {
 
         // Properties & Fields
@@ -32,6 +37,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         private Budget _Budget;
         public Budget GetBudget => _Budget;
+
+        private BudgetManagement.Budget TestBudget { get; set; }
 
 
         public double BudgetPerDay => GetBudgetPerDay();
@@ -154,16 +161,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
         }
 
 
-        private ObservableCollection<BudgetItemViewModel> _BudgetItemViewModels;
-        public ObservableCollection<BudgetItemViewModel> BudgetItemViewModels
-        {
-            get { return _BudgetItemViewModels; }
-            set
-            {
-                _BudgetItemViewModels = value;
-                OnPropertyChanged(nameof(BudgetItemViewModels));
-            }
-        }
+        [ObservableProperty]
+        private ObservableCollection<BudgetItemViewModel> _BudgetItemViewModels;      
 
         #endregion
 
@@ -187,9 +186,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
             CreateBudgetItemViewModels();
 
-            BudgetItemViewModels.CollectionChanged += BudgetItemViewModels_CollectionChanged;
-
         }
+               
 
 
         private void DispatcherTimer_Tick(object? sender, EventArgs e)
@@ -209,30 +207,69 @@ namespace BudgetWatcher.ViewModels.ViewLess
             BudgetChanges.Insert(0, budgetItem);
 
             CreateBudgetItemViewModel(budgetItem);
+
+            ////testing purposes
+            //TestBudget = new BudgetManagement.Budget()
+            //{
+            //    BudgetPeriodStart = _Budget.Begin,
+            //    BudgetPeriodEnd = _Budget.End,
+            //    InitialBudget = (decimal)_Budget.InitialBudget,
+            //};
+
+            //bool test = budgetItem.Type.Equals(BudgetTypes.Expense);
+
+            //TestBudget.AddBudgetChange(new BudgetManagement.BudgetChange()
+            //{
+            //    Price = (decimal)budgetItem.Sum,
+            //    Quantity = budgetItem.Quantity,
+            //    Item = budgetItem.Item,
+            //    IsExpense = test,
+            //    BudgetChangeDate = DateTime.Now,
+            //    Identifier = BudgetChangeModule.GetBudgetChangeIdentifier()
+            //});
+
+
+            //TestBudget.AddBudgetChange(new BudgetManagement.BudgetChange()
+            //{
+            //    Price = 125m,
+            //    Quantity = 15,
+            //    Item = "sunday icecream",
+            //    IsExpense = true,
+            //    BudgetChangeDate = DateTime.Now,
+            //    Identifier = BudgetChangeModule.GetBudgetChangeIdentifier()
+
+            //});
+
+            //TestBudget.AddBudgetChange(new BudgetManagement.BudgetChange()
+            //{
+            //    Price = 15.15m,
+            //    Quantity = 3,
+            //    Item = "gardening mini job",
+            //    IsExpense = false,
+            //    BudgetChangeDate = DateTime.Now,
+            //    Identifier = BudgetChangeModule.GetBudgetChangeIdentifier()
+
+            //});
+
+            //MessageBox.Show(TestBudget.GetCurrentBalance().ToString());
+
+            //TestBudget.BudgetPeriodStart = _Budget.Begin;
+
         }
 
 
-        private void CalculateExpenses()
+        private void Calculate()
         {
             Expenses = 0.0;
+            Gains = 0.0;
 
-            foreach (BudgetItem item in BudgetChanges)
+            foreach (BudgetItemViewModel item in BudgetItemViewModels)
             {
                 if (item.Type == Enums.BudgetTypes.Expense)
                 {
                     Expenses += item.Result;
                 }
-            }
-        }
-
-
-        private void CalculateGains()
-        {
-            Gains = 0.0;
-
-            foreach (BudgetItem item in BudgetChanges)
-            {
-                if (item.Type == Enums.BudgetTypes.Gain)
+                else if (item.Type == Enums.BudgetTypes.Gain)
                 {
                     Gains += item.Result;
                 }
@@ -249,6 +286,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
             {
                 BudgetChanges.Clear();
                 BudgetItemViewModels.Clear();
+
+                Recalculate();
             }
         }
 
@@ -256,8 +295,6 @@ namespace BudgetWatcher.ViewModels.ViewLess
         public void CreateBudgetItemViewModel(BudgetItem budgetItem)
         {
             BudgetItemViewModel budgetItemViewModel = new BudgetItemViewModel(budgetItem, this);
-
-            budgetItemViewModel.PropertyChanged += BudgetItemViewModel_PropertyChanged;
 
             budgetItemViewModel.ValueChange += BudgetItemViewModel_ValueChange;
 
@@ -274,6 +311,8 @@ namespace BudgetWatcher.ViewModels.ViewLess
             {
                 CreateBudgetItemViewModel(item);
             }
+
+            OnPropertyChanged(nameof(BudgetItemViewModels));
         }
 
 
@@ -307,8 +346,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         private void Recalculate()
         {
-            CalculateExpenses();
-            CalculateGains();
+            Calculate();
             OnPropertyChanged(nameof(NumberOfDays));
             OnPropertyChanged(nameof(DaysLeftPercentage));
         }
@@ -326,6 +364,11 @@ namespace BudgetWatcher.ViewModels.ViewLess
                     break;
                 }
             }
+
+
+            Recalculate();
+
+            OnPropertyChanged(nameof(BudgetItemViewModels));
         }
 
 
@@ -344,18 +387,6 @@ namespace BudgetWatcher.ViewModels.ViewLess
 
         // Events
         #region Events
-
-        private void BudgetItemViewModels_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Recalculate();
-        }
-
-
-        private void BudgetItemViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Recalculate();
-        }
-
 
         private void BudgetItemViewModel_ValueChange(object? sender, EventArgs e)
         {

@@ -1,8 +1,9 @@
-﻿using BudgetWatcher.Navigation;
-using BudgetWatcher.Resources;
+﻿using BudgetWatcher.Resources;
 using BudgetWatcher.Utility;
 using BudgetWatcher.ViewModels;
 using BudgetWatcher.ViewModels.ViewLess;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -17,12 +18,13 @@ namespace BudgetWatcher
     public partial class App : Application
     {
         private BudgetChangeViewModel _BudgetChangeViewModel;
-        private NavigationStore _navigationStore;
 
+        /// <summary>
+        /// für dependency injection den budget manager auf dieser ebene instanzieren und laden,
+        /// dann per di an mainviewmodel übergeben
+        /// </summary>
         public App()
         {
-            _navigationStore = new NavigationStore();
-
         }
 
 
@@ -45,20 +47,40 @@ namespace BudgetWatcher
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            string budgetFolder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\budgets\\";
+            RegisterResources();
 
-            if (!Directory.Exists(budgetFolder))
-            {
-                Directory.CreateDirectory(budgetFolder);
-            }
+            CommunityToolkit.Mvvm.DependencyInjection.Ioc.Default.ConfigureServices(
+                new ServiceCollection()
+                    .AddSingleton<MainWindow>()
+                    .AddSingleton<BudgetChangeViewModel>()
+                    .AddSingleton<MainViewModel>()
+                    .BuildServiceProvider()
+                    );
 
-            ObservableCollection<BudgetViewModel> budgets = new Persistance().DeSerializeNotes();
+            // Microsoft Dependency Injection
+            //ServiceCollection services = new ServiceCollection();
+
+            //services.AddSingleton<MainWindow>();
+
+            //services.AddSingleton<BudgetChangeViewModel>();
+
+            //services.AddSingleton<MainViewModel>();
+
+            //ServiceProvider provider = services.BuildServiceProvider();
+
+            MainWindow mainWindow = Ioc.Default.GetService<MainWindow>()!;
+
+            mainWindow.DataContext = Ioc.Default.GetService<MainViewModel>();
+
+            _BudgetChangeViewModel = Ioc.Default.GetService<BudgetChangeViewModel>()!;
+
+            mainWindow.Show();
+            base.OnStartup(e);
+        }
 
 
-            _BudgetChangeViewModel = new BudgetChangeViewModel(budgets);
-
-            _navigationStore.CurrentViewModel = _BudgetChangeViewModel;
-
+        private void RegisterResources()
+        {
             string folder = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string filter = "*.xml";
             List<string> files = Directory.GetFiles(folder, filter, SearchOption.TopDirectoryOnly).ToList();
@@ -93,15 +115,6 @@ namespace BudgetWatcher
                 }
 
             }
-
-
-            MainWindow mainWindow = new MainWindow()
-            {
-                DataContext = new MainViewModel(_navigationStore, _BudgetChangeViewModel)
-            };
-
-            mainWindow.Show();
-            base.OnStartup(e);
 
         }
     }

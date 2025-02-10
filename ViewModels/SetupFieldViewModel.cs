@@ -12,293 +12,170 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows;
 using BudgetWatcher.Commands;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BudgetWatcher.ViewModels
 {
-    public class SetupFieldViewModel : BaseViewModel
+    public partial class SetupFieldViewModel : ObservableObject
     {
 
         // properties & fields
         #region properties
 
+        [ObservableProperty]
         private Brush _background;
-        public Brush Background
-        {
-            get { return _background; }
-            set
-            {
-                _background = value;
-                OnPropertyChanged(nameof(Background));
-            }
-        }
 
 
+        [ObservableProperty]
         private Color _backgroundColor;
-        public Color BackgroundColor
+
+        partial void OnBackgroundColorChanged(Color value)
         {
-            get { return _backgroundColor; }
-            set
-            {
-                _backgroundColor = value;
-
-                Background = new SolidColorBrush(BackgroundColor);
-                Application.Current.Resources["BackgroundBrush"] = Background;
-
-                OnPropertyChanged(nameof(BackgroundColor));
-            }
+            Background = new SolidColorBrush(BackgroundColor);
+            Application.Current.Resources["BackgroundBrush"] = Background;
         }
 
 
+        [ObservableProperty]
         private double _ButtonCornerRadius;
-        public double ButtonCornerRadius
+
+        partial void OnButtonCornerRadiusChanged(double value)
         {
-            get { return _ButtonCornerRadius; }
-            set
-            {
-                _ButtonCornerRadius = value;
-                Application.Current.Resources["Button_CornerRadius"] = new CornerRadius(_ButtonCornerRadius);
-                OnPropertyChanged(nameof(ButtonCornerRadius));
-            }
+            Application.Current.Resources["Button_CornerRadius"] = new CornerRadius(_ButtonCornerRadius);
         }
 
 
+        [ObservableProperty]
         private Brush _ExpenseBrush;
-        public Brush ExpenseBrush
-        {
-            get { return _ExpenseBrush; }
-            set
-            {
-                _ExpenseBrush = value;
-                OnPropertyChanged(nameof(ExpenseBrush));
-            }
-        }
 
 
+        [ObservableProperty]
         private Color _ExpenseColor;
-        public Color ExpenseColor
+
+        partial void OnExpenseColorChanged(Color value)
         {
-            get { return _ExpenseColor; }
-            set
-            {
-                _ExpenseColor = value;
+            ExpenseBrush = new SolidColorBrush(ExpenseColor);
+            Application.Current.Resources["ExpenseBrush"] = ExpenseBrush;
 
-                ExpenseBrush = new SolidColorBrush(ExpenseColor);
-                Application.Current.Resources["ExpenseBrush"] = ExpenseBrush;
+            GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
+        }
+                
+        [ObservableProperty]
+        private FontFamily _font;
 
-                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
-
-                OnPropertyChanged(nameof(ExpenseColor));
-            }
+        partial void OnFontChanged(FontFamily value)
+        {
+            Application.Current.Resources["FF"] = Font;
         }
 
 
-        private FontFamily _fontFamiliy;
-        public FontFamily FontFamily
-        {
-            get { return _fontFamiliy; }
-            set
-            {
-                _fontFamiliy = value;
-
-                Application.Current.Resources["FF"] = FontFamily;
-                OnPropertyChanged(nameof(FontFamily));
-            }
-        }
-
-
+        [ObservableProperty]
         private double _fontSize;
-        public double FontSize
-        {
-            get { return _fontSize; }
-            set
-            {
-                _fontSize = value;
-
-                OnPropertyChanged(nameof(FontSize));
-            }
-        }
 
 
+        [ObservableProperty]
         private Brush _foreground;
-        public Brush Foreground
-        {
-            get { return _foreground; }
-            set
-            {
-                _foreground = value;
-                OnPropertyChanged(nameof(Foreground));
-            }
-        }
 
 
+        [ObservableProperty]
         private Color _foregroundColor;
-        public Color ForegroundColor
+
+        partial void OnForegroundColorChanged(Color value)
         {
-            get { return _foregroundColor; }
-            set
-            {
-                _foregroundColor = value;
-
-                Foreground = new SolidColorBrush(ForegroundColor);
-                Application.Current.Resources["TextBrush"] = Foreground;
-
-                OnPropertyChanged(nameof(ForegroundColor));
-            }
+            Foreground = new SolidColorBrush(ForegroundColor);
+            Application.Current.Resources["TextBrush"] = Foreground;
         }
 
 
+        [ObservableProperty]
         private Brush _GainBrush;
-        public Brush GainBrush
-        {
-            get { return _GainBrush; }
-            set
-            {
-                _GainBrush = value;
-                OnPropertyChanged(nameof(GainBrush));
-            }
-        }
 
 
+        [ObservableProperty]
         private Color _GainColor;
-        public Color GainColor
+
+        partial void OnGainColorChanged(Color value)
         {
-            get { return _GainColor; }
-            set
-            {
-                _GainColor = value;
-
-                GainBrush = new SolidColorBrush(GainColor);
-                Application.Current.Resources["GainBrush"] = GainBrush;
-                GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
-
-                OnPropertyChanged(nameof(GainColor));
-            }
+            GainBrush = new SolidColorBrush(GainColor);
+            Application.Current.Resources["GainBrush"] = GainBrush;
+            GainExpenseColorChange?.Invoke(this, EventArgs.Empty);
         }
 
 
+        [ObservableProperty]
         private Brush _headerText;
-        public Brush HeaderText
-        {
-            get { return _headerText; }
-            set
-            {
-                _headerText = value;
-                OnPropertyChanged(nameof(Foreground));
-            }
-        }
 
 
+        [ObservableProperty]
         private Color _headerTextColor;
-        public Color HeaderTextColor
+
+        partial void OnHeaderTextColorChanged(Color value)
         {
-            get { return _headerTextColor; }
-            set
-            {
-                _headerTextColor = value;
-
-                HeaderText = new SolidColorBrush(HeaderTextColor);
-                Application.Current.Resources["HeaderBrush"] = HeaderText;
-
-                OnPropertyChanged(nameof(HeaderTextColor));
-            }
+            HeaderText = new SolidColorBrush(HeaderTextColor);
+            Application.Current.Resources["HeaderBrush"] = HeaderText;
         }
 
 
+        [ObservableProperty]
         private string _Language;
-        public string Language
+
+        partial void OnLanguageChanged(string value)
         {
-            get { return _Language; }
-            set
-            {
-                _Language = value;
-
-                Application.Current.Resources["Language"] = _Language;
-
-                OnPropertyChanged(nameof(Language));
-            }
+            Application.Current.Resources["Language"] = _Language;
         }
 
 
+        [ObservableProperty]
         private Brush _selection;
-        public Brush Selection
-        {
-            get { return _selection; }
-            set
-            {
-                _selection = value;
-                OnPropertyChanged(nameof(Selection));
-            }
-        }
 
 
+
+        [ObservableProperty]
         private Color _selectionColor;
-        public Color SelectionColor
+
+        partial void OnSelectionColorChanged(Color value)
         {
-            get { return _selectionColor; }
-            set
-            {
-                _selectionColor = value;
-
-                Selection = new SolidColorBrush(SelectionColor);
-                Application.Current.Resources["SelectionBrush"] = Selection;
-
-                OnPropertyChanged(nameof(SelectionColor));
-            }
+            Selection = new SolidColorBrush(SelectionColor);
+            Application.Current.Resources["SelectionBrush"] = Selection;
         }
 
 
+        [ObservableProperty]
         private CultureInfo _SelectedCulture;
-        public CultureInfo SelectedCulture
+
+        partial void OnSelectedCultureChanged(CultureInfo value)
         {
-            get { return _SelectedCulture; }
-            set
-            {
-                _SelectedCulture = value;
-
-                Application.Current.Resources["Culture"] = XmlLanguage.GetLanguage(_SelectedCulture.IetfLanguageTag);
-
-                OnPropertyChanged(nameof(SelectedCulture));
-            }
+            Application.Current.Resources["Culture"] = XmlLanguage.GetLanguage(_SelectedCulture.IetfLanguageTag);
         }
 
 
+        [ObservableProperty]
         private string _SelectedLanguage;
-        public string SelectedLanguage
+
+        partial void OnSelectedLanguageChanged(string value)
         {
-            get { return _SelectedLanguage; }
-            set
-            {
-                _SelectedLanguage = value;
-                Language = value;
+            Language = value;
 
-
-                //new LanguageResources(_SelectedLanguage);
-
-                OnPropertyChanged(nameof(SelectedLanguage));
-            }
+            //new LanguageResources(_SelectedLanguage);
         }
 
 
+        [ObservableProperty]
         private double _VisibilityFieldCornerRadius;
-        public double VisibilityFieldCornerRadius
+
+        partial void OnVisibilityFieldCornerRadiusChanged(double value)
         {
-            get { return _VisibilityFieldCornerRadius; }
-            set
+            Application.Current.Resources["VisibilityField_CornerRadius"] = new CornerRadius(_VisibilityFieldCornerRadius);
+
+            if (_VisibilityFieldCornerRadius < 40)
             {
-                _VisibilityFieldCornerRadius = value;
-                Application.Current.Resources["VisibilityField_CornerRadius"] = new CornerRadius(_VisibilityFieldCornerRadius);
+                Application.Current.Resources["VisibilityFieldBorderPadding"] = new Thickness(10);
 
-                if (_VisibilityFieldCornerRadius < 40)
-                {
-                    Application.Current.Resources["VisibilityFieldBorderPadding"] = new Thickness(10);
-                }
-                else
-                {
-                    Application.Current.Resources["VisibilityFieldBorderPadding"] = new Thickness(_VisibilityFieldCornerRadius / 4);
-                }
-
-                OnPropertyChanged(nameof(VisibilityFieldCornerRadius));
+                return;
             }
+
+            Application.Current.Resources["VisibilityFieldBorderPadding"] = new Thickness(_VisibilityFieldCornerRadius / 4);
         }
 
         #endregion properties
@@ -342,13 +219,6 @@ namespace BudgetWatcher.ViewModels
         #endregion collections
 
 
-        // commands
-        #region commands
-
-        public ICommand ApplyFontSizeCommand { get; }
-
-        #endregion commands
-
 
         // constructors
         #region constructors
@@ -356,7 +226,7 @@ namespace BudgetWatcher.ViewModels
         public SetupFieldViewModel()
         {
             FontSize = (double)Application.Current.Resources["FS"];
-            FontFamily = (FontFamily)Application.Current.Resources["FF"];
+            Font = (FontFamily)Application.Current.Resources["FF"];
 
             BackgroundColor = ((SolidColorBrush)Application.Current.Resources["BackgroundBrush"]).Color;
             ForegroundColor = ((SolidColorBrush)Application.Current.Resources["TextBrush"]).Color;
@@ -386,7 +256,6 @@ namespace BudgetWatcher.ViewModels
 
             Currency = new ObservableCollection<CultureInfo>(CultureInfo.GetCultures(CultureTypes.SpecificCultures).ToList());
 
-            ApplyFontSizeCommand = new RelayCommand((s) => ApplyFontSize(s), (s) => true);
 
         }
 
@@ -395,6 +264,8 @@ namespace BudgetWatcher.ViewModels
 
         // methods
         #region methods
+
+        [RelayCommand]
         private void ApplyFontSize(object s)
         {
             Application.Current.Resources["FS"] = FontSize;
