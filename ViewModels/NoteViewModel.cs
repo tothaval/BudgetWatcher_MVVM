@@ -7,16 +7,16 @@
 using BudgetWatcher.Commands;
 using BudgetWatcher.Models;
 using BudgetWatcher.ViewModels.ViewLess;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Windows.Input;
 
 namespace BudgetWatcher.ViewModels
 {
-    class NoteViewModel : BaseViewModel
+    public partial class NoteViewModel : ObservableObject
     {
         private Note _Note;
         public Note GetNote => _Note;
-
-		public ICommand NewEntryCommand { get; }
 
 
 		public int ID
@@ -28,6 +28,7 @@ namespace BudgetWatcher.ViewModels
 				OnPropertyChanged(nameof(ID));
 			}
 		}
+
 
 		public string Title
 		{
@@ -67,7 +68,6 @@ namespace BudgetWatcher.ViewModels
 		}
 
 
-		private string _Content;
 		public string Content
 		{
 			get { return _Note.Content; }
@@ -86,8 +86,6 @@ namespace BudgetWatcher.ViewModels
         {
 			_Note = note;
 
-			NewEntryCommand = new RelayCommand((s) => NewEntry(), (s) => true );
-
             System.Windows.Threading.DispatcherTimer Timer = new System.Windows.Threading.DispatcherTimer();
 
             Timer.Tick += Timer_Tick;
@@ -97,6 +95,7 @@ namespace BudgetWatcher.ViewModels
             Timer.Start();
         }
 
+		[RelayCommand]
 		private void NewEntry()
         {
             DateTime_Edited = CurrentDateTime;

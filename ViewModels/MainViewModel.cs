@@ -4,14 +4,18 @@
  *  
  */
 using BudgetWatcher.Commands;
-using BudgetWatcher.Commands.ContextMenuCommands;
-using BudgetWatcher.Navigation;
+using BudgetWatcher.Models;
 using BudgetWatcher.ViewModels.ViewLess;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections;
+using System.Reflection.Metadata;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BudgetWatcher.ViewModels
 {
-    internal class MainViewModel : BaseViewModel
+    public partial class MainViewModel : ObservableObject
     {
         
         // Properties & Fields
@@ -21,89 +25,26 @@ namespace BudgetWatcher.ViewModels
         public BudgetChangeViewModel BudgetChangeViewModel => _BudgetChangeViewModel;
 
 
-        public BaseViewModel CurrentViewModel => _navigationStore.CurrentViewModel;
-
-
-        private readonly NavigationStore _navigationStore;
-
-
         public NoteViewModel NotesField { get; set; }
 
 
         public SetupFieldViewModel SetupField { get; }
 
 
+        [ObservableProperty]
         private bool _ShowBudget;
-        public bool ShowBudget
-        {
-            get { return _ShowBudget; }
-            set
-            {
-                _ShowBudget = value;
-                OnPropertyChanged(nameof(ShowBudget));
-            }
-        }
 
 
+        [ObservableProperty]
         private bool _ShowBudgetOverview;
-        public bool ShowBudgetOverview
-        {
-            get { return _ShowBudgetOverview; }
-            set
-            {
-                _ShowBudgetOverview = value;
-                OnPropertyChanged(nameof(ShowBudgetOverview));
-            }
-        }
 
 
+        [ObservableProperty]
         private bool _ShowNotes;
-        public bool ShowNotes
-        {
-            get { return _ShowNotes; }
-            set
-            {
-                _ShowNotes = value;
-                OnPropertyChanged(nameof(ShowNotes));
-            }
-        }
 
 
+        [ObservableProperty]
         private bool _ShowSetup;
-        public bool ShowSetup
-        {
-            get { return _ShowSetup; }
-            set
-            {
-                _ShowSetup = value;
-                OnPropertyChanged(nameof(ShowSetup));
-            }
-        } 
-        #endregion
-
-
-        // Commands
-        #region Commands
-
-        public ICommand AddBudgetCommand { get; }
-
-
-        public ICommand CloseCommand { get; }
-
-
-        public ICommand DuplicateBudgetCommand { get; }
-
-
-        public ICommand LeftPressCommand { get; }
-
-
-        public ICommand MaximizeCommand { get; }
-
-
-        public ICommand MinimizeCommand { get; }
-
-
-        public ICommand RemoveBudgetCommand { get; } 
 
         #endregion
 
@@ -111,30 +52,24 @@ namespace BudgetWatcher.ViewModels
         // Constructors
         #region Constructors
 
-        public MainViewModel(NavigationStore navigationStore, BudgetChangeViewModel budgetChangeViewModel)
+
+        /// <summary>
+        /// für dependency injection den budget manager auf dieser ebene entgegen nehmen        
+        /// </summary>
+
+        public MainViewModel(BudgetChangeViewModel budgetChangeViewModel)
         {
-            _navigationStore = navigationStore;
             _BudgetChangeViewModel = budgetChangeViewModel;
 
             UpdateNotesField();
 
             SetupField = new SetupFieldViewModel();
-
-
-            _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             _BudgetChangeViewModel.PropertyChanged += _BudgetChangeViewModel_PropertyChanged;
 
             ShowBudget = true;
 
-            AddBudgetCommand = new AddBudgetCommand(_BudgetChangeViewModel);
-            CloseCommand = new CloseCommand();
-            LeftPressCommand = new LeftPressCommand();
-            MaximizeCommand = new MaximizeCommand();
-            MinimizeCommand = new MinimizeCommand();
-            RemoveBudgetCommand = new RemoveBudgetCommand(_BudgetChangeViewModel);
-
             SetupField.GainExpenseColorChange += GainExpenseColorChangeEvent;
-        } 
+        }
 
         #endregion
 
@@ -142,6 +77,67 @@ namespace BudgetWatcher.ViewModels
 
         // Methods
         #region Methods
+
+        [RelayCommand]
+        private void AddBudget(object? parameter)
+        {
+            _BudgetChangeViewModel.AddBudget(
+                new BudgetViewModel(new Budget()));
+        }
+
+
+        [RelayCommand]
+        private void RemoveBudget(object? parameter)
+        {
+            IList selection = (IList)parameter;
+
+            if (selection != null)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    $"Do you want to delete selected budget(s)?",
+                    "Remove Budget Item(s)", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    var selected = selection.Cast<BudgetViewModel>().ToArray();
+
+                    foreach (var item in selected)
+                    {
+                        _BudgetChangeViewModel.RemoveBudget(item);
+                    }
+                }
+            }
+        }
+
+
+
+
+        [RelayCommand]
+        private void Close(object? parameter)
+        {
+            ContextMenuCommandsHandler.CloseMainWindow(parameter);
+        }
+
+
+        [RelayCommand]
+        private void LeftPress(object? parameter)
+        {
+            ContextMenuCommandsHandler.DragMoveMainWindow(parameter);
+        }
+
+
+        [RelayCommand]
+        private void Maximize(object? parameter)
+        {
+            ContextMenuCommandsHandler.MaximizeMainWindow(parameter);
+        }
+
+
+        [RelayCommand]
+        private void Minimize(object? parameter)
+        {
+            ContextMenuCommandsHandler.MinimizeMainWindow(parameter);
+        }
+
 
         private void UpdateNotesField()
         {
@@ -169,14 +165,6 @@ namespace BudgetWatcher.ViewModels
         {
             _BudgetChangeViewModel.UpdateGainExpenseBrush();
         }
-
-
-        private void OnCurrentViewModelChanged()
-        {
-            UpdateNotesField();
-
-            OnPropertyChanged(nameof(CurrentViewModel));
-        } 
 
         #endregion
 

@@ -5,12 +5,13 @@
  */
 using BudgetWatcher.Enums;
 using BudgetWatcher.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 
 namespace BudgetWatcher.ViewModels.ViewLess
 {
-    public class BudgetItemViewModel : BaseViewModel
+    public class BudgetItemViewModel : ObservableObject
     {
 
         // add a BudgetHolder enum?
@@ -18,6 +19,10 @@ namespace BudgetWatcher.ViewModels.ViewLess
         // they could be used to build statistics or offer more detail on output
         // of the financial situation of the budget 
 
+
+        // trennung mvvm, vielleicht so umbauen, dass nur auf eine instanz des modelcodes zugegriffen wird und
+        // nicht auf zich verschiedene, dazu müsste ich erstmal sauber trennen, die verwaltung der daten bauen
+        // und diese in eine sauberere lösung des programms als abhängigkeit einbinden.
 
         // Properties & Fields
         #region Properties & Fields
@@ -78,7 +83,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
                 _BudgetItem.Date = value;
                 OnPropertyChanged(nameof(Date));
 
-                ValueChange?.Invoke(this, EventArgs.Empty);
+                //ValueChange?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -91,7 +96,7 @@ namespace BudgetWatcher.ViewModels.ViewLess
                 _BudgetItem.Item = value;
                 OnPropertyChanged(nameof(Item));
 
-                ValueChange?.Invoke(this, EventArgs.Empty);
+                //ValueChange?.Invoke(this, EventArgs.Empty);
             }
         }
 
