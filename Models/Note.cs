@@ -5,34 +5,35 @@
  *  serializable data model class
  */
 
-namespace BudgetWatcher.Models
+
+namespace BudgetWatcher.Models;
+
+
+[Serializable]
+public class Note
 {
-    [Serializable]
-    public class Note
+    public int ID { get; set; }
+    public string Title { get; set; }
+    public DateTime DateTime_Created { get; set; }
+    public DateTime DateTime_Edited { get; set; }
+
+    public string Content { get; set; }
+
+    public Note()
     {
-        public int ID { get; set; }
-        public string Title { get; set; }
-        public DateTime DateTime_Created { get; set; }
-        public DateTime DateTime_Edited { get; set; }
+        ID = -1;
+        DateTime_Created = DateTime.Now;
 
-        public string Content { get; set; }
+        Title = "title";
+        Content = "note";
+    }
 
-        public Note()
-        {
-            ID = -1;
-            DateTime_Created = DateTime.Now;
-
-            Title = "title";
-            Content = "note";
-        }
-
-        public Note(int id, string title, DateTime dateTime, string content)
-        {
-            ID = id;
-            Title = title;
-            DateTime_Created = dateTime;
-            Content = content;                
-        }
+    public Note(int id, string title, DateTime dateTime, string content)
+    {
+        ID = id;
+        Title = title;
+        DateTime_Created = dateTime;
+        Content = content;
     }
 }
 // EOF

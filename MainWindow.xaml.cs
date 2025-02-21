@@ -10,7 +10,7 @@ namespace BudgetWatcher
         public MainWindow()
         {
             InitializeComponent();
-            
+
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
     }

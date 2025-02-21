@@ -1,12 +1,11 @@
 ﻿
-namespace BudgetWatcher.Enums
+namespace BudgetWatcher.Enums;
+
+public enum BudgetIntervals
 {
-    public enum BudgetIntervals
-    {
-        Once,
-        Day,
-        Month,
-        Year
-    }
+    Once,
+    Day,
+    Month,
+    Year
 }
 // EOF

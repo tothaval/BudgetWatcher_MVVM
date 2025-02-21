@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows;
 using System.Xml.Serialization;
 
 namespace BudgetWatcher.Resources
@@ -9,7 +9,9 @@ namespace BudgetWatcher.Resources
     [Serializable]
     [XmlRoot("ResourceSet")]
     public class ResourceSet
-    { // properties & fields
+    { 
+        
+        // properties & fields
         #region properties
 
         public Color C_Background { get; set; }
@@ -21,7 +23,7 @@ namespace BudgetWatcher.Resources
         public Color C_Text { get; set; }
 
 
-        public Color C_Expense{ get; set; }
+        public Color C_Expense { get; set; }
 
 
         public Color C_Gain { get; set; }
@@ -40,7 +42,7 @@ namespace BudgetWatcher.Resources
         public FontFamily FF { get; set; } = new FontFamily("Verdana");
 
 
-        public string FontFamily { get; set; }
+        public string FontFamily { get; set; } = "Verdana";
 
 
         /// <summary>

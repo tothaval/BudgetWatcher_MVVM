@@ -9,6 +9,9 @@
         xmlns:vms="clr-namespace:BudgetWatcher.ViewModels"
         xmlns:views="clr-namespace:BudgetWatcher.Views"
         x:Name="mainWindow"
+        
+        d:DataContext="{d:DesignInstance Type=vms:MainViewModel}"
+        
         mc:Ignorable="d"
         
         SizeToContent="WidthAndHeight"
@@ -21,6 +24,8 @@
         Language="{DynamicResource Culture}"
         Title="{DynamicResource IDF_MainWindowTitle}">
 
+
+    
     <Window.Resources>
 
         <conv:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -304,9 +309,8 @@
                     Margin="0 15 0 10"
                     >
 
-                    <comp:NoteView DataContext="{Binding NotesField}"
-                                   HorizontalAlignment="Stretch"
-                                   HorizontalContentAlignment="Stretch"/>
+                <ContentPresenter Content="{Binding BudgetChangeViewModel.BudgetViewModel.NoteViewModel}"/>
+
 
                 </Border>
 

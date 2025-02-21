@@ -12,7 +12,7 @@ namespace BudgetWatcher.Components
 
         // Properties & Fields
         #region Properties & Fields
-        
+
 
         public double BudgetPerDay
         {
@@ -66,7 +66,7 @@ namespace BudgetWatcher.Components
         public DateTime End
         {
             get { return (DateTime)GetValue(EndProperty); }
-            set { SetValue(EndProperty, value);  }
+            set { SetValue(EndProperty, value); }
         }
         // Using a DependencyProperty as the backing store for End.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EndProperty =

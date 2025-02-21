@@ -77,8 +77,8 @@ namespace BudgetWatcher.Components
         }
         public static readonly DependencyProperty ItemProperty =
             DependencyProperty.Register("Item", typeof(string), typeof(BudgetItemInputMask), new PropertyMetadata("description"));
- 
-        
+
+
         public int Quantity
         {
             get { return (int)GetValue(QuantityProperty); }
@@ -95,8 +95,8 @@ namespace BudgetWatcher.Components
         }
         public static readonly DependencyProperty SumProperty =
             DependencyProperty.Register("Sum", typeof(double), typeof(BudgetItemInputMask), new PropertyMetadata(0.0));
-  
-        
+
+
         public double Result
         {
             get { return (double)GetValue(ResultProperty); }
@@ -114,7 +114,7 @@ namespace BudgetWatcher.Components
         public BudgetItemInputMask()
         {
             InitializeComponent();
-        } 
+        }
 
         #endregion
 

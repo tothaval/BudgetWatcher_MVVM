@@ -1,10 +1,9 @@
 ﻿
-namespace BudgetWatcher.Enums
+namespace BudgetWatcher.Enums;
+
+public enum BudgetTypes
 {
-    public enum BudgetTypes
-    {
-        Expense,
-        Gain
-    }
+    Expense,
+    Gain
 }
 // EOF
